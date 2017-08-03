@@ -13,7 +13,7 @@ function Harvester(posX, posY){
   this.alive = true;
   this.treesCut = 0;
   this.walkSpeed= .1 + getRandomArbitrary(-0.06,0.06);
-  this.sprintSpeed = .25 + getRandomArbitrary(-0.1,0.1);
+  this.sprintSpeed = .20 + getRandomArbitrary(-0.1,0.1);
   this.pos = createVector(posX, posY);
   this.dir = createVector(0,0);
   this.rundir = createVector(0,0);
@@ -21,6 +21,13 @@ function Harvester(posX, posY){
   this.range = 8000;
   this.dangerConsideration = 1; 
   this.runTarget = null;
+  this.findingNewTarget = true;
+  this.id = makeid();
+
+  this.findingMate = false;
+  this.fertilePoint = 200; // This.growthrate
+  this.canReproduce = 5;
+  this.mate = null;
 
   this.die = function()
   {
@@ -101,6 +108,8 @@ function Harvester(posX, posY){
   {
     //cycle based on alertness
     this.timeAlive++;
+    if(this.timeAlive % 1000 == 0)
+      this.health--; 
     if(this.health <= 0)
     {
        this.die();
@@ -108,27 +117,61 @@ function Harvester(posX, posY){
     else{
       //Check for danger
       //if(this.timeAlive % 60 > 58)
-        this.findClosestPredators();
+      this.findClosestPredators();
       if(this.runTarget)
       {
         this.traverse(this.runTarget, -this.sprintSpeed);
+        this.findingNewTarget = true;
       }
-      else  if(!this.target || !this.target.alive){
-          //Stop the directional movement
-          this.dir.set(0,0);
-          //this.target = this.findTargetLinear();
-          this.target = this.findTargetKD(treeKDTree,1, Math.pow(this.range,3));
+      else  
+      {
+        if(this.canReproduce && (this.fertilePoint < this.timeAlive))
+        {
+          if(this.mate && this.mate.alive)
+          {
+            this.reproduce();
+          }
+          else
+            this.mate = this.findMate();
         }
-        if(this.target){
+        else 
+        {
+          if(!this.target || !this.target.alive || this.findingNewTarget){
+            //Stop the directional movement
+            this.dir.set(0,0);
+            //this.target = this.findTargetLinear();
+            this.target = this.findTargetKD(treeKDTree,1, Math.pow(this.range,3));
+          }
+          if(this.target){
+            this.findingNewTarget = false;
             this.harvest(this.target);
           }
-    if(this.timeAlive % 1000 == 0)
-      this.health--;
-      
+        }
+      }
+    }  
+  }
+
+  //NO MATE FREEZES IT
+  this.reproduce = function()
+  {
+    //Check if not at mate
+    if (this.distSqrd(this.mate) > this.width*this.width)
+    {
+      //Move to mate
+      this.traverse(this.mate, this.walkSpeed);
     }
-      
+    //If at mate, mate it
+    else{
+      //instant birth?
+      //Permanent mate?
+      this.mate = null;
+      this.fertilePoint += this.timeAlive + 1000;
+      this.canReproduce--;
+      harvesterPopulation[harvesterPopulation.length] =  new Harvester(this.pos.x, this.pos.y);
+    }
   }
   
+
   this.display = function()
   {
     fill("blue");
@@ -159,5 +202,13 @@ function Harvester(posX, posY){
     else
       return null;
   }
-
+  this.findMate = function()
+  {
+    var temp = harvesterKDTree.nearest({x: this.pos.x, y: this.pos.y},2, this.range*this.range);
+    if (temp.length > 1){
+      return temp[1][0].itself;
+    }
+    else
+      return null;
+  }
 }
