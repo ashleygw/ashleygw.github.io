@@ -1,3 +1,2 @@
-# Personal Website
-
-This is a where I can post links to cool things I've found and host my portfolio.  
+# AIFinal
+This is a small game I made in p5js to experiment with neural nets. The code for the neural net and pool inheritence is adapted from Dan Shiffman (https://github.com/shiffman), and the project is inspired by his youtube videos on machine learning. There are buttons on the page which should be self-explanitory, and you can use the keyboard if you don't want to click on them.

@@ -1,7 +1,46 @@
----
-layout: default
-title: george's website
----
-<div class="blurb">
-	<a href="/about">Read more about my life...</a></p>
-</div><!-- /.blurb -->
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <!-- PLEASE NO CHANGES BELOW THIS LINE (UNTIL I SAY SO) -->
+  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+  <script language="javascript" type="text/javascript" src="libraries/p5.dom.js"></script>
+  <script language="javascript" type="text/javascript" src="Population.js"></script>
+  <script language="javascript" type="text/javascript" src="dna.js"></script>
+  <script language="javascript" type="text/javascript" src="gamecontrol.js"></script>
+  <script language="javascript" type="text/javascript" src="matrix.js"></script>
+  <script language="javascript" type="text/javascript" src="nn.js"></script>
+  <script language="javascript" type="text/javascript" src="obstacle.js"></script>
+  <script language="javascript" type="text/javascript" src="player.js"></script>
+  <script language="javascript" type="text/javascript" src="reinforcementGame.js"></script>
+  <!-- OK, YOU CAN MAKE CHANGES BELOW THIS LINE AGAIN -->
+
+  <!-- This line removes any default padding and style. 
+       You might only need one of these values set. -->
+  <style> body {padding: 0; margin: 0;} </style>
+</head>
+
+<body>
+<div id="canvascontainer"></div>
+  <p>
+    <br/> tick: <span id="tick">0</span>
+    <br/> Top score all time: <span id="bat">0</span>
+    <br/> generation count: <span id="gen">0</span>
+    <br/> fitness of last generation: <span id="fit">0</span>
+    <br/>Hidden Nodes: <input id="nodes" type="range" min="1" max="20" value="8"> <span id="n">8</span>
+    <button id="reset">Reload with new Hidden Nodes</button>
+  </p>
+  <p>
+    <button id="best">Test best brain</button>
+    <button id="one">Load brain (1)</button>
+    <button id="two">Load brain (2)</button>
+    <button id="three">Load brain (3)</button><br/>
+    <button id="force">Force new generation (F)</button>
+    <button id="graph">Toggle Graph (G)</button>
+    <button id="brain">Toggle Brain (B)</button>
+    <button id="display">Toggle display (D)</button>
+    <button id="sav">Print best brain (S)</button>
+  </p>
+
+</body>
+</html>
