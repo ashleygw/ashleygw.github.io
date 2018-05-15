@@ -30,7 +30,6 @@ class Player
         };
 
         this.think=function() {
-            // First find the closest pipe
             let closest = null;
             let closest2 = null;
             let max = -Infinity;
